@@ -5,21 +5,47 @@ using UnityEngine.InputSystem;
 
 public class playerScript : MonoBehaviour
 {
+    
     [SerializeField] private float speed = 1f;
     [SerializeField] private float jumpForce = 1f;
     [SerializeField] private Vector2 mouseSensitivity = Vector2.one;
     [SerializeField] public new Transform camera;
 
+    [Header("Camera Smooth Settings")]
+    [SerializeField] private float smoothSpeed = 8f;  // Ajuste pour plus/moins de smooth
+    [SerializeField] private bool enableTilt = true;
+    [SerializeField] private float tiltAmount = 2f;
+
     private Vector3 velocity;
 
+    public static playerScript Instance;
     private Vector2 moveInputs, lookInputs;
     private bool jumpPerformed;
 
     private CharacterController characterController;
 
+    // Variables pour le smooth
+    private float currentYRotation = 0f;
+    private float targetYRotation = 0f;
+    private float currentXRotation = 0f;
+    private float targetXRotation = 0f;
+    private float currentTilt = 0f;
+
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
+
+        // Initialise les rotations actuelles
+        currentYRotation = transform.eulerAngles.y;
+        currentXRotation = camera.localEulerAngles.x;
+
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     //Le reste
@@ -45,17 +71,35 @@ public class playerScript : MonoBehaviour
 
     private void Look()
     {
-        //Rotation de gauche a droite.
-        transform.Rotate(lookInputs.x * Time.deltaTime * mouseSensitivity.x * Vector3.up);
+        // Calcule la rotation target du player (gauche/droite)
+        targetYRotation += lookInputs.x * Time.deltaTime * mouseSensitivity.x;
 
-        //Rotation de haut en bas.
-        float _eyeAngleX = camera.localEulerAngles.x - lookInputs.y * Time.deltaTime * mouseSensitivity.y;
+        // Calcule la rotation target de la caméra (haut/bas)
+        targetXRotation -= lookInputs.y * Time.deltaTime * mouseSensitivity.y;
 
-        //Clamp la rotation pour pas faire nimporte quoi avec la tete.
-        if (_eyeAngleX <= 90) _eyeAngleX = _eyeAngleX > 0 ? Mathf.Clamp(_eyeAngleX, 0, 85) : _eyeAngleX;
-        if (_eyeAngleX > 270) _eyeAngleX = Mathf.Clamp(_eyeAngleX, 275, 360);
+        // Clamp AVANT le smooth (important!)
+        targetXRotation = Mathf.Clamp(targetXRotation, -85f, 85f);
 
-        camera.localEulerAngles = Vector3.right * _eyeAngleX;
+        // Smooth les rotations avec Lerp
+        currentYRotation = Mathf.LerpAngle(currentYRotation, targetYRotation, Time.deltaTime * smoothSpeed);
+        currentXRotation = Mathf.Lerp(currentXRotation, targetXRotation, Time.deltaTime * smoothSpeed);
+
+        // Applique la rotation smooth au player
+        transform.rotation = Quaternion.Euler(0f, currentYRotation, 0f);
+
+        // Tilt bodycam (inclinaison lors des rotations rapides)
+        if (enableTilt)
+        {
+            float targetTiltValue = -lookInputs.x * tiltAmount;
+            currentTilt = Mathf.Lerp(currentTilt, targetTiltValue, Time.deltaTime * smoothSpeed);
+        }
+        else
+        {
+            currentTilt = Mathf.Lerp(currentTilt, 0f, Time.deltaTime * smoothSpeed);
+        }
+
+        // Applique la rotation smooth + tilt à la caméra
+        camera.localRotation = Quaternion.Euler(currentXRotation, 0f, currentTilt);
     }
 
     private float Gravity(float _verticalVelocity)
@@ -78,7 +122,4 @@ public class playerScript : MonoBehaviour
     public void MovePerformed(InputAction.CallbackContext _ctx) => moveInputs = _ctx.ReadValue<Vector2>();
     public void JumpPerformed(InputAction.CallbackContext _ctx) => jumpPerformed = _ctx.performed;
     public void LookPerformed(InputAction.CallbackContext _ctx) => lookInputs = _ctx.ReadValue<Vector2>();
-
-
-
 }
