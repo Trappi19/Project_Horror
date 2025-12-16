@@ -5,8 +5,10 @@ using UnityEngine.InputSystem;
 
 public class playerScript : MonoBehaviour
 {
-    
+    [Header("Player Settings")]
+    [SerializeField] public Input Action;
     [SerializeField] private float speed = 1f;
+    [SerializeField] private float speedRun = 2f;
     [SerializeField] private float jumpForce = 1f;
     [SerializeField] private Vector2 mouseSensitivity = Vector2.one;
     [SerializeField] public new Transform camera;
@@ -21,6 +23,7 @@ public class playerScript : MonoBehaviour
     public static playerScript Instance;
     private Vector2 moveInputs, lookInputs;
     private bool jumpPerformed;
+    private bool isSprinting = false;
 
     private CharacterController characterController;
 
@@ -57,7 +60,8 @@ public class playerScript : MonoBehaviour
     //Toute la physique
     private void FixedUpdate()
     {
-        Vector3 _horizontalVelocity = speed * new Vector3(moveInputs.x, 0f, moveInputs.y);
+        float currentSpeed = isSprinting ? speedRun : speed;
+        Vector3 _horizontalVelocity = currentSpeed * new Vector3(moveInputs.x, 0f, moveInputs.y);
         float _gravityVelocity = Gravity(velocity.y);
 
         velocity = _horizontalVelocity + _gravityVelocity * Vector3.up;
@@ -68,6 +72,15 @@ public class playerScript : MonoBehaviour
 
         characterController.Move(_move * Time.deltaTime);
     }
+
+    public void SprintPerformed(InputAction.CallbackContext _ctx)
+    {
+        if (_ctx.performed)
+            isSprinting = true;
+        else if (_ctx.canceled)
+            isSprinting = false;
+    }
+
 
     private void Look()
     {
