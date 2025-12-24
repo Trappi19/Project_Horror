@@ -4,6 +4,8 @@ public class LightFlicker : MonoBehaviour
 {
     [Header("Lampe à contrôler")]
     public Light targetLight;   // Assigne ici ton Spot / Point Light
+    public Light OnLight;   // Assigne ici ton Spot / Point Light
+
 
     [Header("Intensité")]
     public float minIntensity = 0.5f;
@@ -36,5 +38,6 @@ public class LightFlicker : MonoBehaviour
         float finalIntensity = Mathf.Lerp(baseIntensity, targetIntensity, flickerStrength);
 
         targetLight.intensity = Mathf.Lerp(targetLight.intensity, finalIntensity, Time.deltaTime * 10f);
+        OnLight.intensity = Mathf.Lerp(OnLight.intensity, finalIntensity, Time.deltaTime * 10f);
     }
 }
