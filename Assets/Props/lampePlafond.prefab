@@ -135,7 +135,7 @@ Light:
   m_Color: {r: 0.9977089, g: 1, b: 0.9198113, a: 1}
   m_Intensity: 50
   m_Range: 10
-  m_SpotAngle: 88.18666
+  m_SpotAngle: 176.05939
   m_InnerSpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
@@ -266,7 +266,7 @@ MonoBehaviour:
   targetLight: {fileID: 7387592792414310051}
   OnLight: {fileID: 9099067623685916175}
   minIntensity: 2
-  maxIntensity: 20
+  maxIntensity: 50
   flickerSpeed: 2
   speedJitter: 2
   baseIntensity: 0.5
