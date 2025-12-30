@@ -18,6 +18,15 @@ public class playerScript : MonoBehaviour
     [SerializeField] private bool enableTilt = true;
     [SerializeField] private float tiltAmount = 2f;
 
+    [Header("Interaction")]
+    [SerializeField] private float interactionDistance = 3f;
+    [SerializeField] private LayerMask interactionLayer = 1; // Crée un layer "Interactable"
+    [SerializeField] private GameObject interactionPointUI;
+    private Interactable currentInteractable;
+    private bool wasInteractableLastFrame = false;
+    private bool showPoint = false;
+
+
     private Vector3 velocity;
 
     public static playerScript Instance;
@@ -38,9 +47,12 @@ public class playerScript : MonoBehaviour
     {
         characterController = GetComponent<CharacterController>();
 
-        // Initialise les rotations actuelles
-        currentYRotation = transform.eulerAngles.y;
-        currentXRotation = camera.localEulerAngles.x;
+        if (camera != null)
+            currentXRotation = camera.localEulerAngles.x;
+        else
+            Debug.LogError("Camera non assignée !");
+
+        currentYRotation = transform.eulerAngles.y; // Garde ça
 
         if (Instance != null && Instance != this)
         {
@@ -51,11 +63,50 @@ public class playerScript : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+
     //Le reste
     private void Update()
     {
         Look();
+        CheckInteraction();
+
     }
+
+    private void CheckInteraction()
+    {
+        if (interactionPointUI == null || camera == null) return;
+
+        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0));
+
+        // Debug ray depuis ORIGINE du raycast
+        Debug.DrawRay(ray.origin, ray.direction * interactionDistance, Color.red);
+
+        if (Physics.Raycast(ray, out RaycastHit hit, interactionDistance, interactionLayer))
+        {
+            Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green);
+
+            Interactable interactable = hit.collider.GetComponent<Interactable>();
+            if (interactable != null && !showPoint)
+            {
+                showPoint = true;
+                interactionPointUI.SetActive(true);
+                currentInteractable = interactable;
+            }
+        }
+        else if (showPoint)
+        {
+            showPoint = false;
+            interactionPointUI.SetActive(false);
+            currentInteractable = null;
+        }
+    }
+
+
+
+
+
+
+
 
     //Toute la physique
     private void FixedUpdate()
@@ -135,4 +186,12 @@ public class playerScript : MonoBehaviour
     public void MovePerformed(InputAction.CallbackContext _ctx) => moveInputs = _ctx.ReadValue<Vector2>();
     public void JumpPerformed(InputAction.CallbackContext _ctx) => jumpPerformed = _ctx.performed;
     public void LookPerformed(InputAction.CallbackContext _ctx) => lookInputs = _ctx.ReadValue<Vector2>();
+    public void InteractPerformed(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed && currentInteractable != null)
+        {
+            currentInteractable.Interact();
+        }
+    }
+
 }
