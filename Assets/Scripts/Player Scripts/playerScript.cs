@@ -1,7 +1,8 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class playerScript : MonoBehaviour
 {
@@ -20,12 +21,13 @@ public class playerScript : MonoBehaviour
 
     [Header("Interaction")]
     [SerializeField] private float interactionDistance = 3f;
-    [SerializeField] private LayerMask interactionLayer = 1; // Cr�e un layer "Interactable"
+    [SerializeField] private LayerMask interactionLayer = 1; // Crée un layer "Interactable"
     [SerializeField] private GameObject interactionPointUI;
     private Interactable currentInteractable;
-    private bool wasInteractableLastFrame = false;
     private bool showPoint = false;
 
+    public bool canMove = true;
+    private bool isInCinematic = false;
 
     private Vector3 velocity;
 
@@ -50,9 +52,9 @@ public class playerScript : MonoBehaviour
         if (camera != null)
             currentXRotation = camera.localEulerAngles.x;
         else
-            Debug.LogError("Camera non assign�e !");
+            Debug.LogError("Camera non assignée !");
 
-        currentYRotation = transform.eulerAngles.y; // Garde �a
+        currentYRotation = transform.eulerAngles.y; // Garde ça
 
         if (Instance != null && Instance != this)
         {
@@ -61,24 +63,65 @@ public class playerScript : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
-
 
     //Le reste
     private void Update()
     {
+        if (!canMove) return;
+
         Look();
         CheckInteraction();
 
+    }
+
+    //Toute la physique
+    private void FixedUpdate()
+    {
+        if (!canMove) return; // ✅ Bloque physique aussi
+
+        float currentSpeed = isSprinting ? speedRun : speed;
+        Vector3 _horizontalVelocity = currentSpeed * new Vector3(moveInputs.x, 0f, moveInputs.y);
+        float _gravityVelocity = Gravity(velocity.y);
+
+        velocity = _horizontalVelocity + _gravityVelocity * Vector3.up;
+
+        TryJump();
+
+        Vector3 _move = transform.forward * velocity.z + transform.right * velocity.x + transform.up * velocity.y;
+
+        characterController.Move(_move * Time.deltaTime);
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        SetCinematic(false);
+        canMove = true;
+
+        if (camera != null)
+            camera.localRotation = Quaternion.identity;
+
+        Debug.Log("Cam reset auto !"); // Tu verras ce message à chaque scène
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded; // Cleanup
+    }
+
+    public GameObject GetInteractionUI()
+    {
+        return interactionPointUI;
     }
 
     private void CheckInteraction()
     {
         if (interactionPointUI == null || camera == null) return;
 
-        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0));
+        // ✅ CENTRÉ : Ray depuis centre écran viewport
+        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
 
-        // Debug ray depuis ORIGINE du raycast
         Debug.DrawRay(ray.origin, ray.direction * interactionDistance, Color.red);
 
         if (Physics.Raycast(ray, out RaycastHit hit, interactionDistance, interactionLayer))
@@ -100,28 +143,15 @@ public class playerScript : MonoBehaviour
             currentInteractable = null;
         }
     }
-
-
-
-
-
-
-
-
-    //Toute la physique
-    private void FixedUpdate()
+    public void SetCinematic(bool active)
     {
-        float currentSpeed = isSprinting ? speedRun : speed;
-        Vector3 _horizontalVelocity = currentSpeed * new Vector3(moveInputs.x, 0f, moveInputs.y);
-        float _gravityVelocity = Gravity(velocity.y);
+        isInCinematic = active;
+        canMove = !active;
 
-        velocity = _horizontalVelocity + _gravityVelocity * Vector3.up;
-
-        TryJump();
-
-        Vector3 _move = transform.forward * velocity.z + transform.right * velocity.x + transform.up * velocity.y;
-
-        characterController.Move(_move * Time.deltaTime);
+        // ✅ Désactive BodycamHeadBob pendant cinématique
+        BodycamHeadBob headBob = camera.GetComponent<BodycamHeadBob>();
+        if (headBob != null)
+            headBob.enabled = !active;
     }
 
     public void SprintPerformed(InputAction.CallbackContext _ctx)
@@ -135,10 +165,12 @@ public class playerScript : MonoBehaviour
 
     private void Look()
     {
+        if (isInCinematic) return;
+
         // Calcule la rotation target du player (gauche/droite)
         targetYRotation += lookInputs.x * Time.deltaTime * mouseSensitivity.x;
 
-        // Calcule la rotation target de la cam�ra (haut/bas)
+        // Calcule la rotation target de la caméra (haut/bas)
         targetXRotation -= lookInputs.y * Time.deltaTime * mouseSensitivity.y;
 
         // Clamp AVANT le smooth (important!)
@@ -162,7 +194,7 @@ public class playerScript : MonoBehaviour
             currentTilt = Mathf.Lerp(currentTilt, 0f, Time.deltaTime * smoothSpeed);
         }
 
-        // Applique la rotation smooth + tilt � la cam�ra
+        // Applique la rotation smooth + tilt à la caméra
         camera.localRotation = Quaternion.Euler(currentXRotation, 0f, currentTilt);
     }
 
