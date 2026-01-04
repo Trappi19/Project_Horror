@@ -84,13 +84,8 @@ public class HospitalBedInteractable : Interactable
     IEnumerator transitionLevel()
     {
         transition.SetTrigger("Pass");
-
         yield return new WaitForSeconds(4);
-        transition.SetTrigger("ToNormal");
-        VHSVideo.SetActive(true);
         SceneManager.LoadScene("TestScene");
-        yield return new WaitForSeconds(2); // <-- Je me suis arrêté ici, ça marchait pas
-        VHSVideo.SetActive(false); //  Désactive la vidéo après le chargement
     }
 
 }
