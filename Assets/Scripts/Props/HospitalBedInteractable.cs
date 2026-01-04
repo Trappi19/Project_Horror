@@ -11,7 +11,6 @@ public class HospitalBedInteractable : Interactable
 
     [Header("Transition")]
     [SerializeField] public Animator transition;
-    [SerializeField] public GameObject VHSVideo;
 
     private bool hasInteracted = false;
 
@@ -85,7 +84,7 @@ public class HospitalBedInteractable : Interactable
     {
         transition.SetTrigger("Pass");
         yield return new WaitForSeconds(4);
-        SceneManager.LoadScene("TestScene");
+        SceneManager.LoadScene("HospitalRoom");
     }
 
 }

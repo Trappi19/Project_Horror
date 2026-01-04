@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Video;
@@ -7,6 +8,7 @@ public class VideoSceneIntro : MonoBehaviour
     private VideoPlayer videoPlayer;
     private bool testSceneLoaded = false;
     public GameObject WhiteScreen;
+    public Animator TransitionWhiteScreen;
 
     void OnEnable()
     {
@@ -20,12 +22,14 @@ public class VideoSceneIntro : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name == "TestScene" && !testSceneLoaded)
+        if (scene.name == "HPRoom" && !testSceneLoaded)
         {
             videoPlayer.Play();
             testSceneLoaded = true;  // One-shot
-            WhiteScreen.SetActive(false);
+            //WhiteScreen.SetActive(false);
+            TransitionWhiteScreen.SetTrigger("Pass");
             Debug.Log("VHS Intro lancée sur TestScene !");
+            StartCoroutine(WhiteScreenToBlack());
         }
     }
 
@@ -39,5 +43,11 @@ public class VideoSceneIntro : MonoBehaviour
     void EndReached(VideoPlayer vp)
     {
         vp.enabled = false;
+    }
+
+    IEnumerator WhiteScreenToBlack()
+    {
+        yield return new WaitForSeconds(10);
+        TransitionWhiteScreen.SetTrigger("SlowDefault");
     }
 }

@@ -314,6 +314,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VideoSceneIntro
   WhiteScreen: {fileID: 1281192566723816052}
+  TransitionWhiteScreen: {fileID: 103477823975186435}
 --- !u!328 &3931302848217786683
 VideoPlayer:
   m_ObjectHideFlags: 0
