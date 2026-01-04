@@ -9,6 +9,10 @@ public class HospitalBedInteractable : Interactable
     [SerializeField] private float moveDuration = 2f;
     [SerializeField] private AnimationCurve smoothCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
+    [Header("Transition")]
+    [SerializeField] public Animator transition;
+    [SerializeField] public GameObject VHSVideo;
+
     private bool hasInteracted = false;
 
     public override void Interact()
@@ -63,6 +67,10 @@ public class HospitalBedInteractable : Interactable
         // yield return new WaitForSeconds(5f);
         // playerScript.Instance.canMove = true;
 
+        yield return new WaitForSeconds(2);
+        StartCoroutine(transitionLevel());
+
+
         // ✅ Pour revenir après 5 sec, AJOUTE aussi reset position :
         /*
         yield return new WaitForSeconds(5f);
@@ -70,6 +78,19 @@ public class HospitalBedInteractable : Interactable
         playerScript.Instance.SetCinematic(false);
         // Reset position caméra
         */
+    }
+
+
+    IEnumerator transitionLevel()
+    {
+        transition.SetTrigger("Pass");
+
+        yield return new WaitForSeconds(4);
+        transition.SetTrigger("ToNormal");
+        VHSVideo.SetActive(true);
+        SceneManager.LoadScene("TestScene");
+        yield return new WaitForSeconds(2); // <-- Je me suis arrêté ici, ça marchait pas
+        VHSVideo.SetActive(false); //  Désactive la vidéo après le chargement
     }
 
 }
