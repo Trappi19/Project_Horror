@@ -103,6 +103,12 @@ public class playerScript : MonoBehaviour
             camera.localRotation = Quaternion.identity;
 
         Debug.Log("Cam reset auto !"); // Tu verras ce message à chaque scène
+
+        if (GetComponent<Animator>() != null)
+        {
+            // Reset ou trigger anim Player
+            GetComponent<Animator>().SetTrigger("ResetPostLoad");
+        }
     }
 
     private void OnDestroy()

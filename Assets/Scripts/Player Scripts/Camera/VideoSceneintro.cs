@@ -5,39 +5,52 @@ using UnityEngine.Video;
 
 public class VideoSceneIntro : MonoBehaviour
 {
-    private VideoPlayer videoPlayer;
-    private bool testSceneLoaded = false;
+    [Header("Assignés Inspector")]
+    public VideoPlayer videoPlayer;
     public GameObject WhiteScreen;
     public Animator TransitionWhiteScreen;
+    public Animator Logo;
+    //private AudioSource audioSource;
+
+    private bool HPRoom = false;
 
     void OnEnable()
     {
-        SceneManager.sceneLoaded += OnSceneLoaded;  // Écoute TOUS les loads
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     void OnDisable()
     {
-        SceneManager.sceneLoaded -= OnSceneLoaded;  // Nettoie
-    }
-
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        if (scene.name == "HPRoom" && !testSceneLoaded)
-        {
-            videoPlayer.Play();
-            testSceneLoaded = true;  // One-shot
-            //WhiteScreen.SetActive(false);
-            TransitionWhiteScreen.SetTrigger("Pass");
-            Debug.Log("VHS Intro lancée sur TestScene !");
-            StartCoroutine(WhiteScreenToBlack());
-        }
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     void Awake()
     {
-        videoPlayer = GetComponent<VideoPlayer>();
-        if (videoPlayer == null) videoPlayer = gameObject.AddComponent<VideoPlayer>();
-        videoPlayer.loopPointReached += EndReached;
+        // Lazy init si pas assigné
+        if (videoPlayer == null) videoPlayer = GetComponent<VideoPlayer>();
+        //if (audioSource == null) audioSource = GetComponent<AudioSource>();
+        if (WhiteScreen == null) WhiteScreen = GameObject.Find("WhiteScreen");  // Ou tag
+        if (TransitionWhiteScreen == null) TransitionWhiteScreen = WhiteScreen?.GetComponent<Animator>();
+        if (Logo == null) Logo = GameObject.Find("Logo")?.GetComponent<Animator>();
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name != "HospitalRoom" || HPRoom) return;
+
+        // Checks null avant tout !
+        if (TransitionWhiteScreen != null) TransitionWhiteScreen.SetBool("Pass", false);
+        else Debug.LogError("TransitionWhiteScreen null !");
+
+        //if (audioSource != null) audioSource.Play();
+        //else Debug.LogError("AudioSource null !");
+
+        if (videoPlayer != null) videoPlayer.Play();
+        else Debug.LogError("VideoPlayer null !");
+
+        Debug.Log("VHS Intro lancée !");
+        HPRoom = true;
+        StartCoroutine(LogoApparition());
     }
 
     void EndReached(VideoPlayer vp)
@@ -45,9 +58,11 @@ public class VideoSceneIntro : MonoBehaviour
         vp.enabled = false;
     }
 
-    IEnumerator WhiteScreenToBlack()
+    IEnumerator LogoApparition()
     {
-        yield return new WaitForSeconds(10);
-        TransitionWhiteScreen.SetTrigger("SlowDefault");
+        yield return new WaitForSeconds(6);
+        if (Logo != null) Logo.SetTrigger("Active");
+        yield return new WaitForSeconds(4);
+        if (Logo != null) Logo.SetBool("Active", false);
     }
 }
