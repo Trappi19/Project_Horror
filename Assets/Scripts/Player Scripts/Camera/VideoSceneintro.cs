@@ -50,7 +50,8 @@ public class VideoSceneIntro : MonoBehaviour
 
         Debug.Log("VHS Intro lancée !");
         HPRoom = true;
-        StartCoroutine(LogoApparition());
+        StartCoroutine(LogoApparitionCloseVideo());
+
     }
 
     void EndReached(VideoPlayer vp)
@@ -58,11 +59,18 @@ public class VideoSceneIntro : MonoBehaviour
         vp.enabled = false;
     }
 
-    IEnumerator LogoApparition()
+    IEnumerator LogoApparitionCloseVideo()
     {
         yield return new WaitForSeconds(6);
         if (Logo != null) Logo.SetTrigger("Active");
         yield return new WaitForSeconds(4);
         if (Logo != null) Logo.SetBool("Active", false);
+        yield return new WaitForSeconds(6);
+        TransitionWhiteScreen.SetBool("Black", true);
+        yield return new WaitForSeconds(2);
+        videoPlayer.Stop();
+        TransitionWhiteScreen.SetBool("Black", true);   
+        yield return new WaitForSeconds(0.5f);
+        TransitionWhiteScreen.SetBool("Black", false);
     }
 }
