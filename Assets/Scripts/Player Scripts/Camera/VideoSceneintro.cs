@@ -10,7 +10,7 @@ public class VideoSceneIntro : MonoBehaviour
     public GameObject WhiteScreen;
     public Animator TransitionWhiteScreen;
     public Animator Logo;
-    //private AudioSource audioSource;
+    public AudioSource audioSource;
 
     private bool HPRoom = false;
 
@@ -28,7 +28,7 @@ public class VideoSceneIntro : MonoBehaviour
     {
         // Lazy init si pas assigné
         if (videoPlayer == null) videoPlayer = GetComponent<VideoPlayer>();
-        //if (audioSource == null) audioSource = GetComponent<AudioSource>();
+        if (audioSource == null) audioSource = GetComponent<AudioSource>();
         if (WhiteScreen == null) WhiteScreen = GameObject.Find("WhiteScreen");  // Ou tag
         if (TransitionWhiteScreen == null) TransitionWhiteScreen = WhiteScreen?.GetComponent<Animator>();
         if (Logo == null) Logo = GameObject.Find("Logo")?.GetComponent<Animator>();
@@ -42,8 +42,8 @@ public class VideoSceneIntro : MonoBehaviour
         if (TransitionWhiteScreen != null) TransitionWhiteScreen.SetBool("Pass", false);
         else Debug.LogError("TransitionWhiteScreen null !");
 
-        //if (audioSource != null) audioSource.Play();
-        //else Debug.LogError("AudioSource null !");
+        if (audioSource != null) audioSource.Play();
+        else Debug.LogError("AudioSource null !");
 
         if (videoPlayer != null) videoPlayer.Play();
         else Debug.LogError("VideoPlayer null !");
