@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class playerScript : MonoBehaviour
 {
+
     [Header("Player Settings")]
     [SerializeField] public Input Action;
     [SerializeField] private float speed = 1f;
@@ -93,6 +94,7 @@ public class playerScript : MonoBehaviour
 
         characterController.Move(_move * Time.deltaTime);
     }
+
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -233,3 +235,11 @@ public class playerScript : MonoBehaviour
     }
 
 }
+
+public class PlayerScript : MonoBehaviour
+{
+    public static PlayerScript Instance { get; private set; }
+
+    public bool canMove = true;  // Déjà public comme avant
+}
+

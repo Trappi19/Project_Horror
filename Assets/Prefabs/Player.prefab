@@ -159,6 +159,7 @@ GameObject:
   - component: {fileID: 1937805265523113746}
   - component: {fileID: 8815986546308663441}
   - component: {fileID: 3931302848217786683}
+  - component: {fileID: 3279931331315892623}
   m_Layer: 3
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -318,6 +319,7 @@ MonoBehaviour:
   TransitionWhiteScreen: {fileID: 103477823975186435}
   Logo: {fileID: 8451979198801797503}
   audioSource: {fileID: 645008705205215223}
+  playerScript: {fileID: 1549812269439918956}
 --- !u!328 &3931302848217786683
 VideoPlayer:
   m_ObjectHideFlags: 0
@@ -354,6 +356,28 @@ VideoPlayer:
   m_WaitForFirstFrame: 1
   m_FrameReadyEventEnabled: 0
   m_VideoShaders: []
+--- !u!95 &3279931331315892623
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2632052058829322344}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 6a288245af71dcb43ae4a16ff0429add, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2977453816700526340
 GameObject:
   m_ObjectHideFlags: 0

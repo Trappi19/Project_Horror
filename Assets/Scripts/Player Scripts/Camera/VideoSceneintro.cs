@@ -12,7 +12,9 @@ public class VideoSceneIntro : MonoBehaviour
     public Animator Logo;
     public AudioSource audioSource;
 
+    
     private bool HPRoom = false;
+
 
     void OnEnable()
     {
@@ -44,6 +46,7 @@ public class VideoSceneIntro : MonoBehaviour
 
         if (audioSource != null) audioSource.Play();
         else Debug.LogError("AudioSource null !");
+
 
         if (videoPlayer != null) videoPlayer.Play();
         else Debug.LogError("VideoPlayer null !");
