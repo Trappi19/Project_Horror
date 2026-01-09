@@ -66,9 +66,9 @@ public class VideoSceneIntro : MonoBehaviour
     {
         yield return new WaitForSeconds(6);
         if (Logo != null) Logo.SetTrigger("Active");
-        yield return new WaitForSeconds(4);
+        yield return new WaitForSeconds(8);
         if (Logo != null) Logo.SetBool("Active", false);
-        yield return new WaitForSeconds(6);
+        yield return new WaitForSeconds(2);
         TransitionWhiteScreen.SetBool("Black", true);
         yield return new WaitForSeconds(2);
         videoPlayer.Stop();

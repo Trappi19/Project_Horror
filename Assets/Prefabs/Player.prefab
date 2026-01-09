@@ -319,7 +319,6 @@ MonoBehaviour:
   TransitionWhiteScreen: {fileID: 103477823975186435}
   Logo: {fileID: 8451979198801797503}
   audioSource: {fileID: 645008705205215223}
-  playerScript: {fileID: 1549812269439918956}
 --- !u!328 &3931302848217786683
 VideoPlayer:
   m_ObjectHideFlags: 0
@@ -691,7 +690,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 500, y: 50}
+  m_SizeDelta: {x: 500, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1388312669321482654
 CanvasRenderer:
@@ -721,7 +720,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 3a3f848a49a2fbd43a44b8264af11e28, type: 3}
+  m_Texture: {fileID: 2800000, guid: 13929aef6c9e44041a05b6c290df47d6, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0

@@ -1948,10 +1948,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 7811629086645954369, guid: 05bc997133780014f987dffbf63a9588, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 500
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 3822055140614840810, guid: 05bc997133780014f987dffbf63a9588, type: 3}
