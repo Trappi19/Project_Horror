@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Rendering;
@@ -9,7 +10,9 @@ public class MenuScript : MonoBehaviour
     [SerializeField] GameObject settingsPanel;
     [SerializeField] GameObject menuPanel;
     [SerializeField] AudioSource click;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SerializeField] AudioSource StartSound;
+    [SerializeField] Animator fader;
+    
 
     void Start()
     {
@@ -24,8 +27,8 @@ public class MenuScript : MonoBehaviour
 
     public void LunchSceneIntro()
     {
-        click.Play();
-        SceneManager.LoadScene("StartScene");
+        StartSound.Play();
+        StartCoroutine(LunchNewGame());
     }
 
     public void OpenSettings()
@@ -40,6 +43,18 @@ public class MenuScript : MonoBehaviour
         click.Play();
         menuPanel.SetActive(true);
         settingsPanel.SetActive(false);
+    }
+
+    IEnumerator LunchNewGame()
+    {
+        fader.SetTrigger("Fading");
+        yield return new WaitForSeconds(2);
+        SceneManager.LoadScene("StartScene");
+    }
+
+    IEnumerator ContinnueGame()
+    {
+        yield break;
     }
 
 }

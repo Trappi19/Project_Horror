@@ -34,6 +34,10 @@ MonoBehaviour:
     m_Localized: Languages
     m_Metadata:
       m_Items: []
+  - m_Id: 289807338393600
+    m_Localized: Fullscreen
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

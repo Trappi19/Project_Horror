@@ -31,6 +31,10 @@ MonoBehaviour:
     m_Key: Lang
     m_Metadata:
       m_Items: []
+  - m_Id: 289807338393600
+    m_Key: FullScreen
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
