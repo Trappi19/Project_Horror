@@ -38,6 +38,18 @@ MonoBehaviour:
     m_Localized: Pleine Ecran
     m_Metadata:
       m_Items: []
+  - m_Id: 4071567851343872
+    m_Localized: "G\xE9n\xE9ral\n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4071703478358016
+    m_Localized: Voix
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4071763360436224
+    m_Localized: Musique
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -35,6 +35,18 @@ MonoBehaviour:
     m_Key: FullScreen
     m_Metadata:
       m_Items: []
+  - m_Id: 4071567851343872
+    m_Key: General
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4071703478358016
+    m_Key: Voice
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4071763360436224
+    m_Key: Music
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

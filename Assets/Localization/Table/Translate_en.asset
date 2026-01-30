@@ -38,6 +38,18 @@ MonoBehaviour:
     m_Localized: Fullscreen
     m_Metadata:
       m_Items: []
+  - m_Id: 4071567851343872
+    m_Localized: General
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4071703478358016
+    m_Localized: Voices
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4071763360436224
+    m_Localized: Music
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
