@@ -46,9 +46,6 @@ public class StartScene : MonoBehaviour
         playerScript.Instance.SetCinematic(true);
         playerScript.Instance.canMove = false;
 
-        GameObject interactionUI = playerScript.Instance.GetInteractionUI();
-        if (interactionUI != null) interactionUI.SetActive(false);
-
         // Étape 1: Position sur le lit
         yield return StartCoroutine(SmoothCameraMove());
 
@@ -58,15 +55,13 @@ public class StartScene : MonoBehaviour
         // Étape 3: Tourne à gauche  
         yield return StartCoroutine(TurnLeft());
 
-        // Étape 4: Se lève (avec TP)
+        // Étape 4: Se lève
         yield return StartCoroutine(GetUp());
 
-        // ✅ RÉACTIVE LE JOUEUR ICI (après le wait de 1s dans GetUp)
+        // Fin de cinématique (réactive le joueur)
         playerScript.Instance.SetCinematic(false);
         playerScript.Instance.canMove = true;
-        if (interactionUI != null) interactionUI.SetActive(true);
-
-        Debug.Log("Cinématique finie, joueur libre avec bonne rotation !");
+        Debug.Log("Cinématique finie, joueur libre !");
     }
 
 
@@ -185,6 +180,8 @@ public class StartScene : MonoBehaviour
         Transform player = playerScript.Instance.transform;
         GameObject interactionUI = playerScript.Instance.GetInteractionUI();
 
+        // Désactive contrôle + UI
+        playerScript.Instance.canMove = false;
 
         Vector3 startPos = playerCam.position;
         Quaternion startRot = playerCam.rotation;
@@ -193,7 +190,6 @@ public class StartScene : MonoBehaviour
 
         float elapsed = 0f;
 
-        // Animation caméra (se lever)
         while (elapsed < moveDuration4)
         {
             elapsed += Time.deltaTime;
@@ -205,40 +201,34 @@ public class StartScene : MonoBehaviour
             yield return null;
         }
 
-        // ✅ FORCE position/rotation finale caméra (anti-drift)
+        // Force caméra finale
         playerCam.position = targetPos;
         playerCam.rotation = targetRot;
 
-        // ✅ TÉLÉPORTATION PLAYER
         CharacterController cc = player.GetComponent<CharacterController>();
         if (cc != null)
         {
-            cc.enabled = false;  // Désactive avant TP
+            cc.enabled = false;
         }
 
-        // Position finale
         player.position = playerEndPosition.position;
 
-        // Rotation Y du player (orientation horizontale)
+        // ✅ Rotation Y du player = orientation horizontale finale
         Vector3 playerRot = player.eulerAngles;
         playerRot.y = playerEndPosition.eulerAngles.y;
         player.eulerAngles = playerRot;
 
-        // Caméra garde sa rotation finale de cinématique
-        playerCam.rotation = targetRot;
+        // ✅ Garde la rotation finale de la caméra (pas reset !)
+        playerCam.rotation = targetRot;  // Ou copie la rotation de cameraTarget4
 
-        // Sync physics
         Physics.SyncTransforms();
 
         if (cc != null)
         {
-            cc.enabled = true;  // Réactive CharacterController
+            cc.enabled = true;
         }
 
-        Debug.Log("Player téléporté + rotation finale OK !");
-
-        yield return new WaitForSeconds(1);
+        Debug.Log("Player téléporté proprement !");
     }
-
 
 }
