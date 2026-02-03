@@ -12,6 +12,6 @@ public class DontDestroyOnLoad : MonoBehaviour
     // Update is called once per frame
     private void Awake()
     {
-        
+        DontDestroyOnLoad(gameObject);
     }
 }

@@ -48,7 +48,7 @@ public class MenuScript : MonoBehaviour
     IEnumerator LunchNewGame()
     {
         fader.SetTrigger("Fading");
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(5);
         SceneManager.LoadScene("StartScene");
     }
 
