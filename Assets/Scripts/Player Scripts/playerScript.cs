@@ -27,8 +27,14 @@ public class playerScript : MonoBehaviour
     private Interactable currentInteractable;
     private bool showPoint = false;
 
+    [Header("Movements")]
+    [SerializeField] private float acceleration = 20f;
+    [SerializeField] private float deceleration = 15f;
+
+    private Vector3 currentHorizontalVelocity = Vector3.zero;
+
     public bool canMove = true;
-    private bool isInCinematic = false;
+    public bool isInCinematic = false;
 
     private Vector3 velocity;
 
@@ -45,6 +51,8 @@ public class playerScript : MonoBehaviour
     private float currentXRotation = 0f;
     private float targetXRotation = 0f;
     private float currentTilt = 0f;
+
+
 
     private void Awake()
     {
@@ -80,38 +88,62 @@ public class playerScript : MonoBehaviour
     //Toute la physique
     private void FixedUpdate()
     {
-        if (!canMove) return; // ✅ Bloque physique aussi
-
         float currentSpeed = isSprinting ? speedRun : speed;
-        Vector3 _horizontalVelocity = currentSpeed * new Vector3(moveInputs.x, 0f, moveInputs.y);
-        float _gravityVelocity = Gravity(velocity.y);
+        Vector3 inputDir = new Vector3(moveInputs.x, 0f, moveInputs.y);
 
-        velocity = _horizontalVelocity + _gravityVelocity * Vector3.up;
+        // direction locale -> monde (pour que ça suive l'orientation du player)
+        Vector3 targetHorizontalVelocity = Vector3.zero;
+        if (inputDir.sqrMagnitude > 0.001f)
+        {
+            inputDir = inputDir.normalized;
+            targetHorizontalVelocity = (transform.right * inputDir.x + transform.forward * inputDir.z) * currentSpeed;
+
+            // accélération quand on input
+            currentHorizontalVelocity = Vector3.MoveTowards(
+                currentHorizontalVelocity,
+                targetHorizontalVelocity,
+                acceleration * Time.fixedDeltaTime
+            );
+        }
+        else
+        {
+            // pas d’input -> on freine doucement (glissade)
+            currentHorizontalVelocity = Vector3.MoveTowards(
+                currentHorizontalVelocity,
+                Vector3.zero,
+                deceleration * Time.fixedDeltaTime
+            );
+        }
+
+        // gravité + saut comme avant
+        float _gravityVelocity = Gravity(velocity.y);
+        velocity = new Vector3(
+            currentHorizontalVelocity.x,
+            _gravityVelocity,
+            currentHorizontalVelocity.z
+        );
 
         TryJump();
 
-        Vector3 _move = transform.forward * velocity.z + transform.right * velocity.x + transform.up * velocity.y;
+        Vector3 _move = velocity * Time.fixedDeltaTime;
+        characterController.Move(_move);
 
-        characterController.Move(_move * Time.deltaTime);
     }
 
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        SetCinematic(false);
-        canMove = true;
-
-        if (camera != null)
-            camera.localRotation = Quaternion.identity;
-
-        Debug.Log("Cam reset auto !"); // Tu verras ce message à chaque scène
-
-        if (GetComponent<Animator>() != null)
+        if (scene.name != "StartScene")
         {
-            // Reset ou trigger anim Player
-            GetComponent<Animator>().SetTrigger("ResetPostLoad");
+            if (camera != null)
+                camera.localRotation = Quaternion.identity;
+            SetCinematic(false);
+            canMove = true;
+            Debug.Log("Cam reset auto sur nouvelle scène !");
         }
     }
+
+
 
     private void OnDestroy()
     {
@@ -151,6 +183,8 @@ public class playerScript : MonoBehaviour
             currentInteractable = null;
         }
     }
+
+
     public void SetCinematic(bool active)
     {
         isInCinematic = active;

@@ -32,6 +32,7 @@ public class StartScene : MonoBehaviour
     {
         playerScript = Object.FindFirstObjectByType<playerScript>();
 
+
         StartCoroutine(SequenceComplete());
     }
 
@@ -43,31 +44,53 @@ public class StartScene : MonoBehaviour
 
     private IEnumerator SequenceComplete()
     {
+        Transform playerCam = playerScript.Instance.camera;
+        Transform player = playerScript.Instance.transform;
+
+        // ✅ DÉTACHE la caméra du player pendant la cinématique
+        Transform originalParent = playerCam.parent;
+        Vector3 originalLocalPos = playerCam.localPosition;
+        Quaternion originalLocalRot = playerCam.localRotation;
+
+        playerCam.SetParent(null);  // La cam devient indépendante
+
         playerScript.Instance.SetCinematic(true);
         playerScript.Instance.canMove = false;
 
-        // Étape 1: Position sur le lit
+        // Toutes tes étapes de cinématique
         yield return StartCoroutine(SmoothCameraMove());
+        yield return new WaitForSeconds(2);
 
-        // Étape 2: Tourne à droite
         yield return StartCoroutine(TurnRight());
+        yield return new WaitForSeconds(2);
 
-        // Étape 3: Tourne à gauche  
         yield return StartCoroutine(TurnLeft());
+        yield return new WaitForSeconds(1);
 
-        // Étape 4: Se lève
-        yield return StartCoroutine(GetUp());
+        yield return StartCoroutine(GetUp());  // TP du player ici
 
-        // Fin de cinématique (réactive le joueur)
+        // ✅ RÉATTACHE la caméra au player APRÈS le TP
+        playerCam.SetParent(originalParent);
+        playerCam.localPosition = originalLocalPos;  // Position locale par défaut
+        playerCam.localRotation = Quaternion.Euler(
+            playerScript.Instance.GetType()
+                .GetField("currentXRotation", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                .GetValue(playerScript.Instance) as float? ?? 0f,
+            0f,
+            0f
+        );
+
+        // Réactive le joueur
         playerScript.Instance.SetCinematic(false);
         playerScript.Instance.canMove = true;
+
         Debug.Log("Cinématique finie, joueur libre !");
     }
 
 
+
     private IEnumerator SmoothCameraMove()
     {
-        yield return new WaitForSeconds(2);
 
         playerScript.Instance.SetCinematic(true);
 
@@ -103,7 +126,6 @@ public class StartScene : MonoBehaviour
         playerCam.rotation = targetRot;
 
         Debug.Log("Caméra figée sur le lit !");
-        yield return new WaitForSeconds(3);
     }
 
     private IEnumerator TurnRight()
@@ -178,10 +200,6 @@ public class StartScene : MonoBehaviour
     {
         Transform playerCam = playerScript.Instance.camera;
         Transform player = playerScript.Instance.transform;
-        GameObject interactionUI = playerScript.Instance.GetInteractionUI();
-
-        // Désactive contrôle + UI
-        playerScript.Instance.canMove = false;
 
         Vector3 startPos = playerCam.position;
         Quaternion startRot = playerCam.rotation;
@@ -190,6 +208,7 @@ public class StartScene : MonoBehaviour
 
         float elapsed = 0f;
 
+        // Animation caméra (se lever)
         while (elapsed < moveDuration4)
         {
             elapsed += Time.deltaTime;
@@ -205,30 +224,56 @@ public class StartScene : MonoBehaviour
         playerCam.position = targetPos;
         playerCam.rotation = targetRot;
 
+        // --- TÉLÉPORTATION PLAYER ---
+
         CharacterController cc = player.GetComponent<CharacterController>();
         if (cc != null)
-        {
             cc.enabled = false;
-        }
 
+        // Position finale du joueur (Empty au sol)
         player.position = playerEndPosition.position;
 
-        // ✅ Rotation Y du player = orientation horizontale finale
-        Vector3 playerRot = player.eulerAngles;
-        playerRot.y = playerEndPosition.eulerAngles.y;
-        player.eulerAngles = playerRot;
-
-        // ✅ Garde la rotation finale de la caméra (pas reset !)
-        playerCam.rotation = targetRot;  // Ou copie la rotation de cameraTarget4
+        // On veut que le joueur regarde dans la même direction horizontale
+        // que la caméra finale (ou que playerEndPosition)
+        Vector3 finalCamEuler = playerCam.rotation.eulerAngles;
+        Vector3 playerEuler = player.eulerAngles;
+        playerEuler.y = finalCamEuler.y;          // même Y que la caméra
+        player.eulerAngles = playerEuler;
 
         Physics.SyncTransforms();
 
         if (cc != null)
-        {
             cc.enabled = true;
-        }
 
-        Debug.Log("Player téléporté proprement !");
+        // --- SYNC AVEC LE SYSTÈME DE LOOK ---
+
+        // On met les valeurs internes de playerScript
+        playerScript ps = playerScript.Instance;
+
+        // Y = rotation du joueur
+        ps.GetType()
+          .GetField("currentYRotation", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+          .SetValue(ps, player.eulerAngles.y);
+
+        ps.GetType()
+          .GetField("targetYRotation", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+          .SetValue(ps, player.eulerAngles.y);
+
+        // X = rotation verticale de la caméra (prendre l'angle X de la cam locale)
+        float camLocalX = playerCam.localEulerAngles.x;
+
+        ps.GetType()
+          .GetField("currentXRotation", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+          .SetValue(ps, camLocalX);
+
+        ps.GetType()
+          .GetField("targetXRotation", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+          .SetValue(ps, camLocalX);
+
+        Debug.Log("Player + rotations synchro avec playerScript !");
+
+        yield return null;
     }
+
 
 }
