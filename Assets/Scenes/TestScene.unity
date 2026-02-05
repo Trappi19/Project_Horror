@@ -1897,6 +1897,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1841269158210492381, guid: 05bc997133780014f987dffbf63a9588, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2056671038736298152, guid: 05bc997133780014f987dffbf63a9588, type: 3}
       propertyPath: m_TargetTexture
       value: 
@@ -1941,9 +1945,33 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3596202474059440369, guid: 05bc997133780014f987dffbf63a9588, type: 3}
+      propertyPath: m_ActionEvents.Array.size
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 3596202474059440369, guid: 05bc997133780014f987dffbf63a9588, type: 3}
+      propertyPath: m_ActionEvents.Array.data[16].m_ActionId
+      value: 4b9a1268-9232-406e-9ce1-25ba30eb9211
+      objectReference: {fileID: 0}
+    - target: {fileID: 3596202474059440369, guid: 05bc997133780014f987dffbf63a9588, type: 3}
+      propertyPath: m_ActionEvents.Array.data[16].m_ActionName
+      value: 'Player/PauseMenu[/Keyboard/escape]'
+      objectReference: {fileID: 0}
+    - target: {fileID: 3610733102926633968, guid: 05bc997133780014f987dffbf63a9588, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.000061035156
+      objectReference: {fileID: 0}
+    - target: {fileID: 5727957777891818898, guid: 05bc997133780014f987dffbf63a9588, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.000030517578
+      objectReference: {fileID: 0}
     - target: {fileID: 7183837134090900178, guid: 05bc997133780014f987dffbf63a9588, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 9137620209821436085, guid: 05bc997133780014f987dffbf63a9588, type: 3}
+      propertyPath: m_Color.a
+      value: 0.5529412
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
