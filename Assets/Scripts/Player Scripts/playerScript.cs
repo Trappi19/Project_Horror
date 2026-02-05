@@ -141,6 +141,16 @@ public class playerScript : MonoBehaviour
             canMove = true;
             Debug.Log("Cam reset auto sur nouvelle scène !");
         }
+
+        if (scene.name == "Menu")
+        {
+            // Force destroy de la caméra d'abord (pour l'AudioListener)
+            var mainCam = transform.Find("Main Camera")?.gameObject;
+            if (mainCam != null) Destroy(mainCam);
+
+            // Puis le reste
+            Destroy(gameObject);
+        }
     }
 
 

@@ -765,6 +765,7 @@ GameObject:
   - component: {fileID: 8815986546308663441}
   - component: {fileID: 3931302848217786683}
   - component: {fileID: 3279931331315892623}
+  - component: {fileID: 8511937408370014152}
   m_Layer: 3
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -982,6 +983,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8511937408370014152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2632052058829322344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5608e92870212c44da94e65e6310b96b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PersistentObject
+  mainMenuSceneName: Menu
 --- !u!1 &2977453816700526340
 GameObject:
   m_ObjectHideFlags: 0
@@ -1641,6 +1655,7 @@ GameObject:
   - component: {fileID: 3596202474059440369}
   - component: {fileID: 4280125270239920642}
   - component: {fileID: 2152145190656732036}
+  - component: {fileID: 2254230656017973984}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1906,6 +1921,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PauseMenu
   pauseMenuUI: {fileID: 1841269158210492381}
   settingsMenuUI: {fileID: 3143474126670470777}
+  transitionAnimator: {fileID: 0}
+--- !u!114 &2254230656017973984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7183837134090900178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5608e92870212c44da94e65e6310b96b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PersistentObject
+  mainMenuSceneName: Menu
 --- !u!1 &7345801207680865568
 GameObject:
   m_ObjectHideFlags: 0
@@ -2211,7 +2240,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1297629403248684098}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2152145190656732036}
+        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
+        m_MethodName: ReturnToMenue
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8643513500612091121
 GameObject:
   m_ObjectHideFlags: 0
@@ -2464,9 +2505,77 @@ PrefabInstance:
       propertyPath: m_Name
       value: Settings Menu
       objectReference: {fileID: 0}
+    - target: {fileID: 1487802827703794782, guid: 1f55eb293a552064dbd156742f9ba8f0, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1487802827703794782, guid: 1f55eb293a552064dbd156742f9ba8f0, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1953175718605541516, guid: 1f55eb293a552064dbd156742f9ba8f0, type: 3}
       propertyPath: m_Color.a
       value: 0.54901963
+      objectReference: {fileID: 0}
+    - target: {fileID: 3007501194264762758, guid: 1f55eb293a552064dbd156742f9ba8f0, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3007501194264762758, guid: 1f55eb293a552064dbd156742f9ba8f0, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3007501194264762758, guid: 1f55eb293a552064dbd156742f9ba8f0, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4435769239823512440, guid: 1f55eb293a552064dbd156742f9ba8f0, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4435769239823512440, guid: 1f55eb293a552064dbd156742f9ba8f0, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4550272448171595686, guid: 1f55eb293a552064dbd156742f9ba8f0, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4550272448171595686, guid: 1f55eb293a552064dbd156742f9ba8f0, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4639960561773280723, guid: 1f55eb293a552064dbd156742f9ba8f0, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4639960561773280723, guid: 1f55eb293a552064dbd156742f9ba8f0, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5324706578149181703, guid: 1f55eb293a552064dbd156742f9ba8f0, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5324706578149181703, guid: 1f55eb293a552064dbd156742f9ba8f0, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5324706578149181703, guid: 1f55eb293a552064dbd156742f9ba8f0, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7109469287634869393, guid: 1f55eb293a552064dbd156742f9ba8f0, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7109469287634869393, guid: 1f55eb293a552064dbd156742f9ba8f0, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7109469287634869393, guid: 1f55eb293a552064dbd156742f9ba8f0, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7406174702134701204, guid: 1f55eb293a552064dbd156742f9ba8f0, type: 3}
       propertyPath: m_Pivot.x
@@ -2546,6 +2655,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7406174702134701204, guid: 1f55eb293a552064dbd156742f9ba8f0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8097548139152588300, guid: 1f55eb293a552064dbd156742f9ba8f0, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2152145190656732036}
+    - target: {fileID: 8097548139152588300, guid: 1f55eb293a552064dbd156742f9ba8f0, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: GoBackMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 8097548139152588300, guid: 1f55eb293a552064dbd156742f9ba8f0, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PauseMenu, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8873110240992222628, guid: 1f55eb293a552064dbd156742f9ba8f0, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8873110240992222628, guid: 1f55eb293a552064dbd156742f9ba8f0, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8873110240992222628, guid: 1f55eb293a552064dbd156742f9ba8f0, type: 3}
+      propertyPath: m_AnchorMin.x
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

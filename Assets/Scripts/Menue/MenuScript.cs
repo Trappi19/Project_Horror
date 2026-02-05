@@ -20,10 +20,10 @@ public class MenuScript : MonoBehaviour
         menuPanel.SetActive(true);
     }
 
-    private void Awake()
-    {
-        DontDestroyOnLoad(gameObject);
-    }
+    //private void Awake()
+    //{
+    //    DontDestroyOnLoad(gameObject);
+    //}
 
     public void LunchSceneIntro()
     {
