@@ -50,6 +50,14 @@ MonoBehaviour:
     m_Localized: Music
     m_Metadata:
       m_Items: []
+  - m_Id: 6480166535909376
+    m_Localized: Paused
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6480208407646208
+    m_Localized: Return to menue
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

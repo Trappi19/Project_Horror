@@ -47,6 +47,18 @@ MonoBehaviour:
     m_Key: Music
     m_Metadata:
       m_Items: []
+  - m_Id: 6480166535909376
+    m_Key: Pause
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6480208407646208
+    m_Key: Return to menu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6480457041793024
+    m_Key: New Entry
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
