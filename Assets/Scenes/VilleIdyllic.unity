@@ -14,7 +14,7 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 10
-  m_Fog: 1
+  m_Fog: 0
   m_FogColor: {r: 0, g: 0, b: 0, a: 1}
   m_FogMode: 3
   m_FogDensity: 0.016
@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 0.88
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.9716981, g: 0.8460686, b: 0.46293163, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: 963838bdd21f47744af197e01d453f5f, type: 2}
+  m_SkyboxMaterial: {fileID: 2100000, guid: b4f152e0498484391a9f0d5a1facf03b, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -94,7 +94,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 112000000, guid: ec7c17205bb1067429a989067c39d7bb, type: 2}
-  m_LightingSettings: {fileID: 4890085278179872738, guid: 0b29808cfe8e0446eb1cdc1105c409b2, type: 2}
+  m_LightingSettings: {fileID: 4890085278179872738, guid: 689228fde573240fcb33862ad7a03930, type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
