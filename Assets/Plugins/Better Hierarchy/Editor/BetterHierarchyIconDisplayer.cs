@@ -15,6 +15,7 @@ namespace Utilities.BetterHierarchy
         private static readonly HashSet<int> additionalSelectedInstanceIDs;
         private const float HIERARCHY_ICON_WIDTH = 18.5f;
 
+        [System.Obsolete]
         static BetterHierarchyIconDisplayer()
         {
 			additionalSelectedInstanceIDs = new HashSet<int>();
@@ -47,6 +48,7 @@ namespace Utilities.BetterHierarchy
             return focusedWindow != null && focusedWindow.GetType().Name == "SceneHierarchyWindow";
         }
 
+        [System.Obsolete]
         private static void OnHierarchyWindowItemOnGUI(int instanceID, Rect selectionRect)
         {
             if (!IsEnabled)
@@ -109,7 +111,8 @@ namespace Utilities.BetterHierarchy
                 expandChildrenIconRect.x -= HIERARCHY_EXPAND_ICON_X_OFFSET;
                 expandChildrenIconRect.width = HIERARCHY_EXPAND_ICON_WIDTH;
 
-                objectStatus.IsSelected = Selection.instanceIDs.Contains(instanceID);
+                // Utiliser Selection.Contains(instanceID) au lieu de l'ancien Selection.instanceIDs
+                objectStatus.IsSelected = Selection.Contains(instanceID);
                 objectStatus.IsHovered = entireRowRect.Contains(Event.current.mousePosition);
                 objectStatus.IsDropDownHovered = expandChildrenIconRect.Contains(Event.current.mousePosition);
 
@@ -118,9 +121,10 @@ namespace Utilities.BetterHierarchy
 
             void UpdateSelectedObjectsList(HierarchyObjectStatus objectStatus)
             {
+                // Remplacement de Selection.instanceIDs.Length par Selection.count
                 if (objectStatus.IsSelected || (objectStatus.IsDropDownHovered && MouseStatus.IsMouseDown))
                 {
-                    if (Selection.instanceIDs.Length > 1)
+                    if (Selection.count > 1)
                         additionalSelectedInstanceIDs.Clear();
                     
                     additionalSelectedInstanceIDs.Add(instanceID);
@@ -227,7 +231,8 @@ namespace Utilities.BetterHierarchy
 
         private static void ClearOriginalIcon(HierarchyObjectStatus hierarchyObjectStatus, Rect selectionRect)
         {
-            int selectedAmount = Selection.instanceIDs.Length > 1 ? Selection.instanceIDs.Length : additionalSelectedInstanceIDs.Count;
+            // Remplacement de Selection.instanceIDs.Length par Selection.count
+            int selectedAmount = Selection.count > 1 ? Selection.count : additionalSelectedInstanceIDs.Count;
             Color color = UnityEditorBackgroundColor.Get(hierarchyObjectStatus, hierarchyHasFocus, selectedAmount);
             Rect backgroundRect = selectionRect;
             backgroundRect.width = HIERARCHY_ICON_WIDTH;
